@@ -1,6 +1,7 @@
 // src/Dashboard.js
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import "./CommonStyles.css";
 
 function Dashboard() {
     const navigate = useNavigate();
@@ -9,7 +10,7 @@ function Dashboard() {
         <div>
             <h2>Welcome to the Dashboard</h2>
             <p>You are logged in!</p>
-            <div>
+            <div className="table-container">
                 <table className="friends-table">
                     <thead>
                         <tr>

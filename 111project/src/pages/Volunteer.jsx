@@ -1,13 +1,14 @@
 // src/Volunteer.js
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import "./CommonStyles.css";
 
 function Volunteer() {
     const navigate = useNavigate();
 
     return (
         <div>
-            <div>
+            <div className="table-container">
                 <table className="eventsForVolunteers-table">
                     <thead>
                         <tr>

@@ -1,12 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import "./CommonStyles.css";
 
 function InterestGroups() {
     const navigate = useNavigate();
 
     return (
         <div>
-            <div>
+            <div className="table-container">
                 <table className="interestGroups-table">
                     <thead>
                         <tr>

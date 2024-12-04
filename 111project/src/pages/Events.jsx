@@ -1,12 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import "./CommonStyles.css";
 
 function Events() {
     const navigate = useNavigate();
 
     return (
         <div>
-            <div>
+            <div className="table-container">
                 <table className="events-table">
                     <thead>
                         <tr>
