@@ -1,11 +1,13 @@
 // src/LoginPage.js
 import React, { useState } from "react";
 import "./LoginPage.css"; // We'll create this CSS file next
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
+    const navigate = useNavigate()
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -42,6 +44,7 @@ function LoginPage() {
                 </div>
                 <button type="submit">Login</button>
             </form>
+            <button onClick={() => navigate('/dashboard')}>temp dashboard button</button>
             {message && <p>{message}</p>}
         </div>
     );
