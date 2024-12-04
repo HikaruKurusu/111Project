@@ -10,6 +10,18 @@ function Dashboard() {
             <h2>Welcome to the Dashboard</h2>
             <p>You are logged in!</p>
             <div>
+                <table className="friends-table">
+                    <thead>
+                        <tr>
+                            <th>Friend Name</th>
+                            <th>Phone Number</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div>
                 <button onClick={() => navigate("/volunteer")}>Volunteer</button>
                 <button onClick={() => navigate("/clubs")}>Clubs</button>
                 <button onClick={() => navigate("/events")}>Events</button>

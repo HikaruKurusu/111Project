@@ -7,7 +7,17 @@ function FriendGroups() {
 
     return (
         <div>
-            <h2>Table of Friend groups goes here</h2>
+            <div>
+                <table className="friendGroups-table">
+                    <thead>
+                        <tr>
+                            <th>Friend Group Name</th>
+                            <th>Friend Group Members</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
             <button onClick={() => navigate("/dashboard")}>Dashboard</button>
         </div>
     );

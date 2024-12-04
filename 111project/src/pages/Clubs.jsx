@@ -6,7 +6,17 @@ function Clubs() {
 
     return (
         <div>
-            <h2>Table of Clubs goes here</h2>
+            <div>
+                <table className="clubs-table">
+                    <thead>
+                        <tr>
+                            <th>Club Name</th>
+                            <th>Club Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
             <button onClick={() => navigate("/dashboard")}>Dashboard</button>
         </div>
     );

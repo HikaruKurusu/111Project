@@ -7,7 +7,17 @@ function Volunteer() {
 
     return (
         <div>
-            <h2>Table of Events goes here</h2>
+            <div>
+                <table className="eventsForVolunteers-table">
+                    <thead>
+                        <tr>
+                            <th>Event Name</th>
+                            <th>Event Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
             <button onClick={() => navigate("/dashboard")}>Dashboard</button>
         </div>
     );

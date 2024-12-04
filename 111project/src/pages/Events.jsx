@@ -6,7 +6,20 @@ function Events() {
 
     return (
         <div>
-            <h2>Table of Events goes here</h2>
+            <div>
+                <table className="events-table">
+                    <thead>
+                        <tr>
+                            <th>Event Name</th>
+                            <th>Event Description</th>
+                            <th>Affiliated Organizations</th>
+                            <th>Popular with</th>
+                            <th>Friends Attending</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
             <button onClick={() => navigate("/dashboard")}>Dashboard</button>
         </div>
     );

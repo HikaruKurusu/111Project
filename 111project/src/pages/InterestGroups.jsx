@@ -6,7 +6,17 @@ function InterestGroups() {
 
     return (
         <div>
-            <h2>Table of Interest groups goes here</h2>
+            <div>
+                <table className="interestGroups-table">
+                    <thead>
+                        <tr>
+                            <th>Interest Group Name</th>
+                            <th>Interest Group Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
             <button onClick={() => navigate("/dashboard")}>Dashboard</button>
         </div>
     );
