@@ -1,22 +1,34 @@
-// src/LoginPage.js
 import React, { useState } from "react";
-import "./LoginPage.css"; // We'll create this CSS file next
+import "./LoginPage.css";
 import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
-        // Here you would handle the login logic (e.g., API request)
-        if (email === "test@example.com" && password === "password123") {
-            setMessage("Login successful!");
-        } else {
-            setMessage("Invalid email or password.");
+        try {
+            const response = await fetch("http://127.0.0.1:5000/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const data = await response.json();
+            if (data.status === "success") {
+                setMessage("Login successful!");
+                // Redirect to the Dashboard page
+                navigate("/dashboard", { state: { user: data.user } });
+            } else {
+                setMessage("Invalid email or password.");
+            }
+        } catch (error) {
+            console.error("Error logging in:", error);
+            setMessage("An error occurred. Please try again.");
         }
     };
 
@@ -43,11 +55,13 @@ function LoginPage() {
                     />
                 </div>
                 <button type="submit">Login</button>
+                <button onClick={() => navigate('/dashboard')}>temp dashboard button</button>
+{message && <p>{message}</p>}
             </form>
-            <button onClick={() => navigate('/dashboard')}>temp dashboard button</button>
             {message && <p>{message}</p>}
         </div>
     );
 }
 
 export default LoginPage;
+

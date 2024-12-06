@@ -1,15 +1,15 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS  # To handle cross-origin requests if needed
+from flask_cors import CORS
 import sqlite3
-import os
+import os  # Make sure this is imported
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS if your front-end and back-end are running on different ports
+CORS(app)  # Enable CORS for cross-origin requests
 
-DATABASE = 'Checkpoint2-dbase.sqlite3'  # Path to your SQLite database file
+DATABASE = os.path.join(os.path.dirname(__file__), 'Checkpoint2-dbase.sqlite3')
 
 def query_db(query, args=(), one=False):
-    """ Helper function to interact with the SQLite database """
+    """ Helper function to interact with SQLite """
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
     cursor.execute(query, args)
@@ -19,27 +19,27 @@ def query_db(query, args=(), one=False):
 
 @app.route('/login', methods=['POST'])
 def login():
-    """ Login endpoint that checks email and password against the database """
+    """ Login endpoint that checks email and password """
     data = request.json
     email = data.get('email')
     password = data.get('password')
 
-    # Check if email and password are provided
+    # Ensure email and password are provided
     if not email or not password:
         return jsonify({"status": "failure", "message": "Email and password are required"}), 400
 
-    # Query the database to check if the user exists
+    # Query the database to validate the user's credentials
     user = query_db("SELECT p_email, p_name FROM person WHERE p_email = ? AND p_password = ?", [email, password], one=True)
 
     if user:
-        # If user found, send success response
+        # If credentials match, return success
         return jsonify({
             "status": "success",
             "message": "Login successful",
             "user": {"email": user[0], "name": user[1]}
         })
     
-    # If no user found, send failure response
+    # If no user is found, return failure
     return jsonify({"status": "failure", "message": "Invalid email or password"}), 401
 
 if __name__ == '__main__':
