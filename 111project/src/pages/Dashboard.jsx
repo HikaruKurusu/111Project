@@ -1,7 +1,7 @@
 // src/Dashboard.js
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./CommonStyles.css";
+import "./DashBoard.css";
 
 function Dashboard() {
     const navigate = useNavigate();
@@ -9,20 +9,19 @@ function Dashboard() {
     return (
         <div>
             <h2>Welcome to the Dashboard</h2>
-            <p>You are logged in!</p>
             <div className="table-container">
                 <table className="friends-table">
                     <thead>
                         <tr>
-                            <th>Friend Name</th>
+                            {/* <th>Friend Name</th>
                             <th>Phone Number</th>
                             <th>Email</th>
-                            <th>Action</th>
+                            <th>Action</th> */}
                         </tr>
                     </thead>
                 </table>
             </div>
-            <div>
+            <div className="taskbar">
                 <button onClick={() => navigate("/volunteer")}>Volunteer</button>
                 <button onClick={() => navigate("/clubs")}>Clubs</button>
                 <button onClick={() => navigate("/events")}>Events</button>

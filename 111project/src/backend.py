@@ -42,5 +42,25 @@ def login():
     # If no user is found, return failure
     return jsonify({"status": "failure", "message": "Invalid email or password"}), 401
 
+@app.route('/events', methods=['GET'])
+def get_events():
+    """ Fetch all events from the events table """
+    events = query_db("SELECT e_name, e_type, e_numattending, e_address FROM events")
+    if events:
+        return jsonify({
+            "status": "success",
+            "events": [
+                {
+                    "name": e[0],
+                    "type": e[1],
+                    "num_attending": e[2],
+                    "address": e[3]
+                }
+                for e in events
+            ]
+        })
+    return jsonify({"status": "failure", "message": "No events found"}), 404
+
+
 if __name__ == '__main__':
     app.run(debug=True)
