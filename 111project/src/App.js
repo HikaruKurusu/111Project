@@ -8,6 +8,7 @@ import Clubs from "./pages/Clubs";
 import Events from "./pages/Events";
 import FriendGroups from "./pages/FriendGroups";
 import InterestGroups from "./pages/InterestGroups";
+import RegisterEventPage from "./pages/registerEventPage";
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                     <Route path="/events" element={<Events />} />
                     <Route path="/friend-groups" element={<FriendGroups />} />
                     <Route path="/interest-groups" element={<InterestGroups />} />
+                    <Route path="/registerEventPage" element={<RegisterEventPage />} />
                 </Routes>
             </div>
         </Router>

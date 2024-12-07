@@ -67,7 +67,7 @@ VALUES
     ('Hackathon', 'john.doe@example.com'),
     ('Football Match', 'jane.smith@example.com'),
     ('Art Exhibition', 'alice.jones@example.com'),
-    ('Chess Tournament', 'mike.jordan@example.com')
+    ('Chess Tournament', 'mike.jordan@example.com');
 
 -- Insert into interest_group table
 INSERT INTO interest_group (ig_name, ig_main_activity, ig_num_members)
