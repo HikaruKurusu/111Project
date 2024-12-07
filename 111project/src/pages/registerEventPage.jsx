@@ -97,6 +97,7 @@ function RegisterEventPage() {
                 </select>
             </div>
             <button onClick={handleRegister}>Register</button>
+            <button onClick = {() => navigate("/events")}>Back to Events</button>
             {message && <p>{message}</p>}
 
             {selectedEvent && (

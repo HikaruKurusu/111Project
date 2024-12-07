@@ -157,25 +157,27 @@ def add_event():
     event_type = data.get('type')
     num_attending = data.get('num_attending', 0)
     address = data.get('address')
+    num_volunteers = data.get('num_volunteers', 0)
+    creator_email = data.get('creator_email')
 
     # Validate input
-    if not name or not event_type or not address:
+    if not name or not event_type or not address or not creator_email:
         return jsonify({"status": "failure", "message": "Missing required fields"}), 400
 
     # Insert the new event into the database
     try:
-        conn = sqlite3.connect(DATABASE)
+        conn = sqlite3.connect(DATABASE, timeout=10)  # Increase timeout to 10 seconds
         cursor = conn.cursor()
         cursor.execute("""
-            INSERT INTO events (e_name, e_type, e_numattending, e_address)
-            VALUES (?, ?, ?, ?)
-        """, (name, event_type, num_attending, address))
+            INSERT INTO events (e_name, e_type, e_numattending, e_address, e_numVolunteers, e_creatorEmail)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (name, event_type, num_attending, address, num_volunteers, creator_email))
         conn.commit()
         conn.close()
         return jsonify({"status": "success", "message": "Event added successfully"}), 201
     except sqlite3.IntegrityError:
         return jsonify({"status": "failure", "message": "Event name already exists"}), 400
-    except Exception as e:
+    except sqlite3.OperationalError as e:
         return jsonify({"status": "failure", "message": str(e)}), 500
 
 @app.route('/clubs', methods=['POST'])

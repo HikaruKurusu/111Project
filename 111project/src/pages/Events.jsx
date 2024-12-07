@@ -38,7 +38,7 @@ function Events() {
         fetch("http://127.0.0.1:5000/events", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(form),
+            body: JSON.stringify({ ...form, creator_email: 'test@example.com' }),  // Include creator_email; change tov variable later
         })
             .then((response) => response.json())
             .then((data) => {
@@ -54,29 +54,6 @@ function Events() {
                 }
             })
             .catch((error) => console.error("Error adding event:", error));
-    };
-
-    // const handleRegister = (eventName) => {
-    //     fetch("http://127.0.0.1:5000/events/register", {
-    //         method: "POST",
-    //         headers: { "Content-Type": "application/json" },
-    //         body: JSON.stringify({ email: userEmail, event_name: eventName }),
-    //     })
-    //         .then((response) => response.json())
-    //         .then((data) => alert(data.message))
-    //         .catch((error) => console.error("Error registering for event:", error));
-        
-    // };
-
-    const handleUnregister = (eventName) => {
-        fetch("http://127.0.0.1:5000/events/unregister", {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: userEmail, event_name: eventName }),
-        })
-            .then((response) => response.json())
-            .then((data) => alert(data.message))
-            .catch((error) => console.error("Error unregistering from event:", error));
     };
 
     return (
@@ -128,7 +105,6 @@ function Events() {
                             <th>Event Type</th>
                             <th>Number Attending</th>
                             <th>Address</th>
-                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -138,13 +114,11 @@ function Events() {
                                 <td>{event.type}</td>
                                 <td>{event.num_attending}</td>
                                 <td>{event.address}</td>
-                                <td>
-                                    <button onClick={()=> navigate("/registerEventPage")}>Register</button>
-                                </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
+                <button onClick={()=> navigate("/registerEventPage")}>Register for Events</button>
             </div>
             <button onClick={() => navigate("/dashboard")}>Dashboard</button>
         </div>
