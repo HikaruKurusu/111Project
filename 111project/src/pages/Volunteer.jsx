@@ -5,8 +5,7 @@ import "./Volunteer.css";
 function Volunteer() {
     const navigate = useNavigate();
     const [events, setEvents] = useState([]);
-
-    //test
+    const [userEmail, setUserEmail] = useState(""); // Assuming user email is tracked
 
     useEffect(() => {
         // Fetch events from the Flask API
@@ -22,6 +21,56 @@ function Volunteer() {
             .catch((error) => console.error("Error fetching events:", error));
     }, []);
 
+    const handleVolunteer = (eventName) => {
+        fetch("http://127.0.0.1:5000/events/volunteer", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: "user@example.com", event_name: eventName }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.status === "success") {
+                    alert(data.message);
+                    // Update the event list to reflect the new volunteer count
+                    setEvents((prevEvents) =>
+                        prevEvents.map((event) =>
+                            event.name === eventName
+                                ? { ...event, numVolunteers: event.numVolunteers + 1 }
+                                : event
+                        )
+                    );
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch((error) => console.error("Error volunteering for event:", error));
+    };
+
+    const handleUnvolunteer = (eventName) => {
+        fetch("http://127.0.0.1:5000/events/unvolunteer", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: "user@example.com", event_name: eventName }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.status === "success") {
+                    alert(data.message);
+                    // Update the event list to reflect the new volunteer count
+                    setEvents((prevEvents) =>
+                        prevEvents.map((event) =>
+                            event.name === eventName
+                                ? { ...event, numVolunteers: event.numVolunteers - 1 }
+                                : event
+                        )
+                    );
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch((error) => console.error("Error unvolunteering for event:", error));
+    };
+
     return (
         <div>
             <div className="table-container">
@@ -30,7 +79,7 @@ function Volunteer() {
                         <tr>
                             <th>Event Name</th>
                             <th>Event Type</th>
-                            <th>Number Attending</th>
+                            <th>Number Volunteering</th>
                             <th>Address</th>
                             <th>Action</th>
                         </tr>
@@ -40,11 +89,11 @@ function Volunteer() {
                             <tr key={index}>
                                 <td>{event.name}</td>
                                 <td>{event.type}</td>
-                                <td>{event.num_attending}</td>
+                                <td>{event.numVolunteers}</td>
                                 <td>{event.address}</td>
                                 <td>
-                                    <button>Click to Volunteer</button>
-                                    <button>Click to Un-Volunteer</button>
+                                    <button onClick={() => handleVolunteer(event.name)}>Click to Volunteer</button>
+                                    <button onClick={() => handleUnvolunteer(event.name)}>Click to Un-Volunteer</button>
                                 </td>
                             </tr>
                         ))}

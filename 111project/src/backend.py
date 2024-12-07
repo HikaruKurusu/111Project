@@ -40,57 +40,72 @@ def login():
         })
     
     # If no user is found, return failure
-    return jsonify({"status": "failure", "message": "Invalid email or password"}), 401
-
-@app.route('/volunteer', methods=['POST'])
-def add_volunteer():
-    """ Add a volunteer to an event """
+    return jsonify({"status": "failure", "message": "Invalid email or password"}), 400
+    
+@app.route('/events/volunteer', methods=['POST'])
+def volunteer_for_event():
     data = request.json
-    event_id = data.get('eventId')
-    user_email = "user@example.com"  # Replace with the actual user email
-
+    event_name = data.get('event_name')
+    email = data.get('email')
+    
+    if not event_name or not email:
+        return jsonify({"status": "failure", "message": "Event name and email are required"}), 400
+    
     try:
         conn = sqlite3.connect(DATABASE)
         cursor = conn.cursor()
-        cursor.execute("""
-            INSERT INTO volunteers (v_roles, p_email, v_isVolunteering)
-            VALUES ('Volunteer', ?, TRUE)
-        """, (user_email,))
-        cursor.execute("""
-            UPDATE events
-            SET e_numattending = e_numattending + 1
-            WHERE e_name = ?
-        """, (event_id,))
+        
+        # Check if the event exists
+        cursor.execute("SELECT 1 FROM events WHERE e_name = ?", (event_name,))
+        if not cursor.fetchone():
+            return jsonify({"status": "failure", "message": "Event not found"}), 404
+        
+        # Check if the user is already volunteering for this event
+        cursor.execute("SELECT 1 FROM volunteers WHERE p_email = ? AND v_eventName = ?", (email, event_name))
+        if cursor.fetchone():
+            return jsonify({"status": "failure", "message": "User is already volunteering for this event"}), 400
+        
+        # Increment the volunteer count
+        cursor.execute("UPDATE events SET e_numVolunteers = e_numVolunteers + 1 WHERE e_name = ?", (event_name,))
+        
+        # Add the volunteer to the volunteers table
+        cursor.execute("INSERT INTO volunteers (v_roles, p_email, v_eventName) VALUES (?, ?, ?)", ('Volunteer', email, event_name))
+        
         conn.commit()
         conn.close()
-        return jsonify({"status": "success", "message": "Successfully volunteered for the event"}), 201
-    except sqlite3.IntegrityError:
-        return jsonify({"status": "failure", "message": "Already volunteered for this event"}), 400
+        
+        return jsonify({"status": "success", "message": "Successfully volunteered for the event!"}), 200
     except Exception as e:
         return jsonify({"status": "failure", "message": str(e)}), 500
-    
-@app.route('/unvolunteer', methods=['POST'])
-def remove_volunteer():
-    """ Remove a volunteer from an event """
-    data = request.json
-    event_id = data.get('eventId')
-    user_email = "user@example.com"  # Replace with the actual user email
 
+@app.route('/events/unvolunteer', methods=['POST'])
+def unvolunteer_for_event():
+    data = request.json
+    event_name = data.get('event_name')
+    email = data.get('email')
+    
+    if not event_name or not email:
+        return jsonify({"status": "failure", "message": "Event name and email are required"}), 400
+    
     try:
         conn = sqlite3.connect(DATABASE)
         cursor = conn.cursor()
-        cursor.execute("""
-            DELETE FROM volunteers
-            WHERE p_email = ? AND v_roles = 'Volunteer'
-        """, (user_email,))
-        cursor.execute("""
-            UPDATE events
-            SET e_numattending = e_numattending - 1
-            WHERE e_name = ?
-        """, (event_id,))
+        
+        # Check if the event exists
+        cursor.execute("SELECT 1 FROM events WHERE e_name = ?", (event_name,))
+        if not cursor.fetchone():
+            return jsonify({"status": "failure", "message": "Event not found"}), 404
+        
+        # Decrement the volunteer count
+        cursor.execute("UPDATE events SET e_numVolunteers = e_numVolunteers - 1 WHERE e_name = ?", (event_name,))
+        
+        # Remove the volunteer from the volunteers table
+        cursor.execute("DELETE FROM volunteers WHERE p_email = ? AND v_eventName = ?", (email, event_name))
+        
         conn.commit()
         conn.close()
-        return jsonify({"status": "success", "message": "Successfully removed from the event"}), 200
+        
+        return jsonify({"status": "success", "message": "Successfully unvolunteered for the event!"}), 200
     except Exception as e:
         return jsonify({"status": "failure", "message": str(e)}), 500
 
@@ -117,7 +132,7 @@ def get_clubs():
 def get_events():
 
     """ Fetch all events from the events table """
-    events = query_db("SELECT e_name, e_type, e_numattending, e_address FROM events")
+    events = query_db("SELECT e_name, e_type, e_numattending, e_address, e_numVolunteers FROM events")
     if events:
         return jsonify({
             "status": "success",
@@ -126,7 +141,8 @@ def get_events():
                     "name": e[0],
                     "type": e[1],
                     "num_attending": e[2],
-                    "address": e[3]
+                    "address": e[3],
+                    "numVolunteers": e[4]
                 }
                 for e in events
             ]
