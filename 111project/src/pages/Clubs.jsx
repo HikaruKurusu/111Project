@@ -11,6 +11,10 @@ function Clubs() {
         meeting_times: "",
         num_members: 0,
     });
+    const [selectedClub, setSelectedClub] = useState(null);
+    const [members, setMembers] = useState([]);
+    const [noMembersFound, setNoMembersFound] = useState(false);
+    const [userName, setUserName] = useState("John Doe"); // Assuming user name is tracked
 
     useEffect(() => {
         // Fetch clubs from the Flask API
@@ -52,6 +56,50 @@ function Clubs() {
             .catch((error) => console.error("Error adding club:", error));
     };
 
+    const handleViewDetails = (clubName) => {
+        fetch(`http://127.0.0.1:5000/clubs/members?club_name=${clubName}`)
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.status === "success") {
+                    setSelectedClub(clubName);
+                    setMembers(data.members);
+                    setNoMembersFound(data.members.length === 0);
+                } else {
+                    console.error("Failed to fetch members:", data.message);
+                    setNoMembersFound(true);
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching members:", error);
+                setNoMembersFound(true);
+            });
+    };
+
+    const handleJoinClub = (clubName) => {
+        fetch("http://127.0.0.1:5000/clubs/join", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ club_name: clubName, member_name: 'TESTUSER' }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.status === "success") {
+                    alert(data.message);
+                    // Update the club list to reflect the new member count
+                    setClubs((prevClubs) =>
+                        prevClubs.map((club) =>
+                            club.name === clubName
+                                ? { ...club, num_members: club.num_members + 1 }
+                                : club
+                        )
+                    );
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch((error) => console.error("Error joining club:", error));
+    };
+
     return (
         <div>
             <div className="table-container">
@@ -73,13 +121,38 @@ function Clubs() {
                                 <td>{club.meeting_times}</td>
                                 <td>{club.num_members}</td>
                                 <td>
-                                    <button>View Details</button>
+                                    <button onClick={() => handleViewDetails(club.name)}>View Details</button>
+                                    <button onClick={() => handleJoinClub(club.name)}>Join Club</button>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
+
+            {selectedClub && (
+                <div className="members-container">
+                    <h2>Members of {selectedClub}</h2>
+                    {noMembersFound ? (
+                        <p>No members found for this club.</p>
+                    ) : (
+                        <table className="members-table">
+                            <thead>
+                                <tr>
+                                    <th>Member Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {members.map((member, index) => (
+                                    <tr key={index}>
+                                        <td>{member}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
+                </div>
+            )}
 
             <form onSubmit={handleAddClub} className="add-club-form">
                 <h2>Add a New Club</h2>
@@ -117,7 +190,6 @@ function Clubs() {
                 />
                 <button type="submit">Add Club</button>
             </form>
-
             <button onClick={() => navigate("/dashboard")}>Dashboard</button>
         </div>
     );

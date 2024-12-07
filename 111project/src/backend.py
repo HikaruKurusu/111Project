@@ -208,6 +208,65 @@ def add_club():
         return jsonify({"status": "failure", "message": "Club name already exists"}), 400
     except Exception as e:
         return jsonify({"status": "failure", "message": str(e)}), 500
+    
+@app.route('/clubs/join', methods=['POST'])
+def join_club():
+    data = request.json
+    club_name = data.get('club_name')
+    member_name = data.get('member_name')
+    
+    if not club_name or not member_name:
+        return jsonify({"status": "failure", "message": "Club name and member name are required"}), 400
+    
+    try:
+        conn = sqlite3.connect(DATABASE)
+        cursor = conn.cursor()
+        
+        # Check if the member is already in the club
+        cursor.execute("SELECT 1 FROM club_member WHERE cm_clubname = ? AND cm_name = ?", (club_name, member_name))
+        if cursor.fetchone():
+            return jsonify({"status": "failure", "message": "Member is already in the club"}), 400
+        
+        # Add the member to the club_member table
+        cursor.execute("INSERT INTO club_member (cm_clubname, cm_name) VALUES (?, ?)", (club_name, member_name))
+        
+        # Increment the number of members in the club
+        cursor.execute("UPDATE club SET c_num_members = c_num_members + 1 WHERE c_name = ?", (club_name,))
+        
+        conn.commit()
+        conn.close()
+        
+        return jsonify({"status": "success", "message": "Successfully joined the club!"}), 200
+    except Exception as e:
+        return jsonify({"status": "failure", "message": str(e)}), 500
+
+@app.route('/clubs/members', methods=['GET'])
+def get_club_members():
+    club_name = request.args.get('club_name')
+    
+    if not club_name:
+        return jsonify({"status": "failure", "message": "Club name is required"}), 400
+    
+    try:
+        conn = sqlite3.connect(DATABASE)
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            SELECT cm_name FROM club_member WHERE cm_clubname = ?
+        """, (club_name,))
+        
+        members = cursor.fetchall()
+        conn.close()
+        
+        if members:
+            return jsonify({
+                "status": "success",
+                "members": [member[0] for member in members]
+            }), 200
+        else:
+            return jsonify({"status": "failure", "message": "No members found"}), 404
+    except Exception as e:
+        return jsonify({"status": "failure", "message": str(e)}), 500
 
 @app.route('/friend_groups', methods=['GET'])
 def get_friend_groups():
