@@ -52,7 +52,7 @@ VALUES
 INSERT INTO volunteers (v_roles, p_email, v_isVolunteering)
 VALUES 
     ('Organizer', 'mike.jordan@example.com', FALSE),
-    ('Coordinator', 'john.doe@example.com', false);
+    ('Coordinator', 'john.doe@example.com', FALSE);
 
 -- Insert into club_member table (Ensure cm_name exists in person and cm_clubname exists in club)
 INSERT INTO club_member (cm_clubname, cm_name)
