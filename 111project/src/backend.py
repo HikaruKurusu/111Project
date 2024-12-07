@@ -226,6 +226,90 @@ def get_interest_groups():
         })
     return jsonify({"status": "failure", "message": "No interest groups found"}), 404
 
+@app.route('/events/attendees', methods=['GET'])
+def get_event_attendees():
+    event_name = request.args.get('event_name')  # Get the event name from the query parameter
+    
+    if not event_name:
+        return jsonify({"status": "failure", "message": "Event name is required"}), 400
+
+    attendees = query_db("""
+        SELECT ea_person_email
+        FROM event_attendees
+        WHERE ea_event_name = ?
+    """, [event_name])
+    
+    if attendees:
+        return jsonify({
+            "status": "success",
+            "attendees": [attendee[0] for attendee in attendees]
+        })
+    
+    return jsonify({"status": "failure", "message": "No attendees found for this event"}), 404
+
+@app.route('/events/register', methods=['POST'])
+def register_for_event():
+    data = request.json
+    email = data.get('email')
+    event_name = data.get('event_name')
+
+    # Validate the inputs
+    if not email or not event_name:
+        return jsonify({"status": "failure", "message": "Email and event name are required"}), 400
+
+    try:
+        # Connect to the database and enable foreign key support
+        conn = sqlite3.connect(DATABASE)
+        conn.execute("PRAGMA foreign_keys = ON")  # Enable foreign key support
+        cursor = conn.cursor()
+
+        # Check if the event exists
+        cursor.execute("SELECT 1 FROM events WHERE e_name = ?", (event_name,))
+        event_exists = cursor.fetchone()
+        if not event_exists:
+            return jsonify({"status": "failure", "message": "Event not found"}), 404
+
+        # Check if the person exists
+        cursor.execute("SELECT 1 FROM person WHERE p_email = ?", (email,))
+        person_exists = cursor.fetchone()
+        if not person_exists:
+            return jsonify({"status": "failure", "message": "Person not found"}), 404
+
+        # Check if the user is already registered for this event
+        cursor.execute("""
+            SELECT 1 FROM event_attendees WHERE ea_event_name = ? AND ea_person_email = ?
+        """, (event_name, email))
+        existing_attendee = cursor.fetchone()
+        
+        if existing_attendee:
+            return jsonify({"status": "failure", "message": "User already registered for this event"}), 400
+
+        # Insert into event_attendees table
+        cursor.execute("""
+            INSERT INTO event_attendees (ea_event_name, ea_person_email)
+            VALUES (?, ?)
+        """, (event_name, email))
+
+        # Update the event's num_attending count
+        cursor.execute("""
+            UPDATE events
+            SET e_numattending = e_numattending + 1
+            WHERE e_name = ?
+        """, (event_name,))
+
+        conn.commit()
+        conn.close()
+
+        return jsonify({"status": "success", "message": "Successfully registered for the event!"}), 201
+
+    except sqlite3.IntegrityError as e:
+        print(f"Integrity error: {e}")
+        return jsonify({"status": "failure", "message": "Foreign key constraint violation"}), 400
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"status": "failure", "message": str(e)}), 500
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
