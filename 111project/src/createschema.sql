@@ -35,6 +35,13 @@ CREATE TABLE events (
     FOREIGN KEY (e_address) REFERENCES locations(l_address)
 );
 
+CREATE TABLE event_attendees (
+    ea_event_name VARCHAR(40) NOT NULL,
+    ea_person_email VARCHAR(40) NOT NULL,
+    FOREIGN KEY (ea_event_name) REFERENCES events(e_name),
+    FOREIGN KEY (ea_person_email) REFERENCES person(p_email)
+);
+
 CREATE TABLE club (
     c_name VARCHAR(30) NOT NULL,
     c_address VARCHAR(60) NOT NULL,
