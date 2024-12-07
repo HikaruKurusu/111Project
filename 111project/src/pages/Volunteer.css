@@ -1,3 +1,10 @@
+.table-container {
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 1200px;
+    width: 100%;
+}
+
 .eventsForVolunteers-table {
     width: 100%;
     border-collapse: collapse;
@@ -18,4 +25,34 @@
 
 .eventsForVolunteers-table tr:nth-child(even) {
     background-color: #f9f9f9;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Styling for the Dashboard button */
+.dashboard-button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.dashboard-button:hover {
+    background-color: #218838;
 }

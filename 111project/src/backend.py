@@ -42,8 +42,28 @@ def login():
     # If no user is found, return failure
     return jsonify({"status": "failure", "message": "Invalid email or password"}), 401
 
+@app.route('/clubs', methods=['GET'])
+def get_clubs():
+    """ Fetch all clubs from the club table """
+    clubs = query_db("SELECT c_name, c_address, c_meeting_times, c_num_members FROM club")
+    if clubs:
+        return jsonify({
+            "status": "success",
+            "clubs": [
+                {
+                    "name": c[0],
+                    "address": c[1],
+                    "meeting_times": c[2],
+                    "num_members": c[3]
+                }
+                for c in clubs
+            ]
+        })
+    return jsonify({"status": "failure", "message": "No clubs found"}), 404
+
 @app.route('/events', methods=['GET'])
 def get_events():
+
     """ Fetch all events from the events table """
     events = query_db("SELECT e_name, e_type, e_numattending, e_address FROM events")
     if events:
@@ -60,6 +80,99 @@ def get_events():
             ]
         })
     return jsonify({"status": "failure", "message": "No events found"}), 404
+
+@app.route('/events', methods=['POST'])
+def add_event():
+    """ Add a new event to the events table """
+    data = request.json
+    name = data.get('name')
+    event_type = data.get('type')
+    num_attending = data.get('num_attending', 0)
+    address = data.get('address')
+
+    # Validate input
+    if not name or not event_type or not address:
+        return jsonify({"status": "failure", "message": "Missing required fields"}), 400
+
+    # Insert the new event into the database
+    try:
+        conn = sqlite3.connect(DATABASE)
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO events (e_name, e_type, e_numattending, e_address)
+            VALUES (?, ?, ?, ?)
+        """, (name, event_type, num_attending, address))
+        conn.commit()
+        conn.close()
+        return jsonify({"status": "success", "message": "Event added successfully"}), 201
+    except sqlite3.IntegrityError:
+        return jsonify({"status": "failure", "message": "Event name already exists"}), 400
+    except Exception as e:
+        return jsonify({"status": "failure", "message": str(e)}), 500
+
+@app.route('/clubs', methods=['POST'])
+def add_club():
+    """ Add a new club to the club table """
+    data = request.json
+    name = data.get('name')
+    address = data.get('address')
+    meeting_times = data.get('meeting_times')
+    num_members = data.get('num_members', 0)
+
+    # Validate input
+    if not name or not address or not meeting_times:
+        return jsonify({"status": "failure", "message": "Missing required fields"}), 400
+
+    # Insert the new club into the database
+    try:
+        conn = sqlite3.connect(DATABASE)
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO club (c_name, c_address, c_meeting_times, c_num_members)
+            VALUES (?, ?, ?, ?)
+        """, (name, address, meeting_times, num_members))
+        conn.commit()
+        conn.close()
+        return jsonify({"status": "success", "message": "Club added successfully"}), 201
+    except sqlite3.IntegrityError:
+        return jsonify({"status": "failure", "message": "Club name already exists"}), 400
+    except Exception as e:
+        return jsonify({"status": "failure", "message": str(e)}), 500
+
+@app.route('/friend_groups', methods=['GET'])
+def get_friend_groups():
+    """ Fetch all friend groups from the friend_groups table """
+    friend_groups = query_db("SELECT fg_gcname, fg_num_members FROM friend_groups")
+    if friend_groups:
+        return jsonify({
+            "status": "success",
+            "friend_groups": [
+                {
+                    "name": fg[0],
+                    "num_members": fg[1]
+                }
+                for fg in friend_groups
+            ]
+        })
+    return jsonify({"status": "failure", "message": "No friend groups found"}), 404
+
+@app.route('/interest_groups', methods=['GET'])
+def get_interest_groups():
+    """ Fetch all interest groups from the interest_group table """
+    interest_groups = query_db("SELECT ig_name, ig_main_activity, ig_num_members FROM interest_group")
+    if interest_groups:
+        return jsonify({
+            "status": "success",
+            "interest_groups": [
+                {
+                    "name": ig[0],
+                    "main_activity": ig[1],
+                    "num_members": ig[2]
+                }
+                for ig in interest_groups
+            ]
+        })
+    return jsonify({"status": "failure", "message": "No interest groups found"}), 404
 
 
 if __name__ == '__main__':

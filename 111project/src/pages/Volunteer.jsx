@@ -41,7 +41,8 @@ function Volunteer() {
                                 <td>{event.num_attending}</td>
                                 <td>{event.address}</td>
                                 <td>
-                                    <button>View Details</button>
+                                    <button>Click to Volunteer</button>
+                                    <button>Click to Un-Volunteer</button>
                                 </td>
                             </tr>
                         ))}

@@ -1,0 +1,53 @@
+.events-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: left;
+}
+
+.events-table th, .events-table td {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+}
+
+.events-table th {
+    background-color: #007bff;
+    color: white;
+}
+
+.events-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+.form-container {
+    margin: 20px 0;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 300px;
+}
+
+form input {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+form button {
+    padding: 10px;
+    font-size: 14px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #0056b3;
+}
+
