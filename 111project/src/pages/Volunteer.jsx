@@ -6,6 +6,8 @@ function Volunteer() {
     const navigate = useNavigate();
     const [events, setEvents] = useState([]);
 
+    //test
+
     useEffect(() => {
         // Fetch events from the Flask API
         fetch("http://127.0.0.1:5000/events")
