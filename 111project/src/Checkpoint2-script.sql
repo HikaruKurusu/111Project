@@ -41,12 +41,12 @@ VALUES
     ('789 Chess St', 'Chess Hall');
 
 -- Insert into events table
-INSERT INTO events (e_name, e_numattending, e_type, e_address, e_numVolunteers)
+INSERT INTO events (e_name, e_numattending, e_type, e_address, e_numVolunteers, e_creatorEmail)
 VALUES 
-    ('Hackathon', 100, 'Competition', '123 Tech St', 0),
-    ('Football Match', 50, 'Game', '456 Sport Ave', 0),
-    ('Art Exhibition', 40, 'Exhibition', '789 Art Rd', 0),
-    ('Chess Tournament', 30, 'Competition', '789 Chess St', 0);
+    ('Hackathon', 100, 'Competition', '123 Tech St', 0, 'john.doe@example.com'),
+    ('Football Match', 50, 'Game', '456 Sport Ave', 0, 'jane.smith@example.com'),
+    ('Art Exhibition', 40, 'Exhibition', '789 Art Rd', 0, 'alice.jones@example.com'),
+    ('Chess Tournament', 30, 'Competition', '789 Chess St', 0, 'mike.jordan@example.com');
 
 -- Insert into volunteers table (Ensure emails exist in person)
 INSERT INTO volunteers (v_roles, p_email)

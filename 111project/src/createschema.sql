@@ -1,7 +1,7 @@
 CREATE TABLE person (
     p_email VARCHAR(40) PRIMARY KEY,
     p_name VARCHAR(30) NOT NULL,
-    p_phonenumber UNSIGNED INT NOT NULL
+    p_phonenumber UNSIGNED INT NOT NULL,
     p_password VARCHAR(20) NOT NULL
 );
 
@@ -30,6 +30,7 @@ CREATE TABLE events (
     e_type VARCHAR(15) NOT NULL,
     e_address VARCHAR(70) NOT NULL,
     e_numVolunteers UNSIGNED INT NOT NULL DEFAULT 0,
+    e_creatorEmail VARCHAR(40) NOT NULL,
     FOREIGN KEY (e_address) REFERENCES locations(l_address)
 );
 
