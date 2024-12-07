@@ -41,12 +41,12 @@ VALUES
     ('789 Chess St', 'Chess Hall');
 
 -- Insert into events table
-INSERT INTO events (e_name, e_numattending, e_type, e_address)
+INSERT INTO events (e_name, e_numattending, e_type, e_address, e_numVolunteers)
 VALUES 
-    ('Hackathon', 100, 'Competition', '123 Tech St'),
-    ('Football Match', 50, 'Game', '456 Sport Ave'),
-    ('Art Exhibition', 40, 'Exhibition', '789 Art Rd'),
-    ('Chess Tournament', 30, 'Competition', '789 Chess St');
+    ('Hackathon', 100, 'Competition', '123 Tech St', 0),
+    ('Football Match', 50, 'Game', '456 Sport Ave', 0),
+    ('Art Exhibition', 40, 'Exhibition', '789 Art Rd', 0),
+    ('Chess Tournament', 30, 'Competition', '789 Chess St', 0);
 
 -- Insert into volunteers table (Ensure emails exist in person)
 INSERT INTO volunteers (v_roles, p_email)

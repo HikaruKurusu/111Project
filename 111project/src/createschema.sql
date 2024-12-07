@@ -5,11 +5,6 @@ CREATE TABLE person (
     p_password VARCHAR(20) NOT NULL
 );
 
-CREATE TABLE friend_group (
-    fg_groupchatname VARCHAR(20) NOT NULL,
-    fg_nummembers UNSIGNED INT NOT NULL
-);
-
 CREATE TABLE club_member (
     cm_clubname VARCHAR(30) NOT NULL,
     cm_name VARCHAR(30) NOT NULL,
@@ -34,6 +29,7 @@ CREATE TABLE events (
     e_numattending UNSIGNED INT NOT NULL,
     e_type VARCHAR(15) NOT NULL,
     e_address VARCHAR(70) NOT NULL,
+    e_numVolunteers UNSIGNED INT NOT NULL DEFAULT 0,
     FOREIGN KEY (e_address) REFERENCES locations(l_address)
 );
 
