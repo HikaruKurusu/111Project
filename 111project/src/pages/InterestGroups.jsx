@@ -42,9 +42,13 @@ function InterestGroups() {
                                 <td>
                                     <button
                                         className="details-button"
-                                        onClick={() => alert(`Viewing details for ${group.name}`)}
                                     >
-                                        View Details
+                                        Join Interest Group
+                                    </button>
+                                    <button
+                                        className="details-button"
+                                    >
+                                        Leave Interest Group
                                     </button>
                                 </td>
                             </tr>
