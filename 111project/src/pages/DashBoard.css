@@ -1,0 +1,23 @@
+.taskbar {
+    display: flex;
+    justify-content: center; /* Center the buttons */
+    align-items: center;    /* Align buttons vertically */
+    gap: 10px;              /* Space between buttons */
+    background-color: #f4f4f4; /* Optional: background for the taskbar */
+    padding: 10px;          /* Padding around the buttons */
+    border: 1px solid #ccc; /* Optional: border for the taskbar */
+    margin-top: 20px;       /* Optional: spacing above the taskbar */
+}
+
+.taskbar button {
+    padding: 10px 20px;     /* Add padding to buttons */
+    background-color: #007bff; /* Button background color */
+    color: white;           /* Text color */
+    border: none;           /* Remove borders */
+    border-radius: 5px;     /* Rounded corners */
+    cursor: pointer;        /* Pointer cursor on hover */
+}
+
+.taskbar button:hover {
+    background-color: #0056b3; /* Darker color on hover */
+}
