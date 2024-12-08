@@ -412,6 +412,36 @@ def create_interest_group():
         return jsonify({"status": "failure", "message": "Interest group name already exists"}), 400
     except Exception as e:
         return jsonify({"status": "failure", "message": str(e)}), 500
+@app.route('/friend_groups', methods=['POST'])
+def create_friend_group():
+    """Create a new friend group"""
+    data = request.json
+    group_name = data.get('name')
+
+    # Validate input
+    if not group_name:
+        return jsonify({"status": "failure", "message": "Group name is required"}), 400
+
+    try:
+        conn = sqlite3.connect(DATABASE)
+        cursor = conn.cursor()
+
+        # Check if the group name already exists
+        cursor.execute("SELECT 1 FROM friend_groups WHERE fg_gcname = ?", (group_name,))
+        if cursor.fetchone():
+            return jsonify({"status": "failure", "message": "Friend group already exists"}), 400
+
+        # Insert the new friend group
+        cursor.execute("""
+            INSERT INTO friend_groups (fg_gcname, fg_num_members)
+            VALUES (?, ?)
+        """, (group_name, 0))
+        conn.commit()
+        conn.close()
+
+        return jsonify({"status": "success", "message": "Friend group created successfully"}), 201
+    except Exception as e:
+        return jsonify({"status": "failure", "message": str(e)}), 500
 
 
 if __name__ == '__main__':
