@@ -386,6 +386,32 @@ def register_for_event():
         print(f"Error: {e}")
         return jsonify({"status": "failure", "message": str(e)}), 500
 
+@app.route('/interest_groups', methods=['POST'])
+def create_interest_group():
+    """Add a new interest group to the database"""
+    data = request.json
+    ig_name = data.get('name')
+    ig_main_activity = data.get('main_activity')
+    ig_num_members = data.get('num_members', 0)
+
+    # Validate input
+    if not ig_name or not ig_main_activity:
+        return jsonify({"status": "failure", "message": "Name and main activity are required"}), 400
+
+    try:
+        conn = sqlite3.connect(DATABASE)
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO interest_group (ig_name, ig_main_activity, ig_num_members)
+            VALUES (?, ?, ?)
+        """, (ig_name, ig_main_activity, ig_num_members))
+        conn.commit()
+        conn.close()
+        return jsonify({"status": "success", "message": "Interest group created successfully"}), 201
+    except sqlite3.IntegrityError:
+        return jsonify({"status": "failure", "message": "Interest group name already exists"}), 400
+    except Exception as e:
+        return jsonify({"status": "failure", "message": str(e)}), 500
 
 
 if __name__ == '__main__':
