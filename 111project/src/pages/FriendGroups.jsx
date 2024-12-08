@@ -20,7 +20,7 @@ function FriendGroups() {
             })
             .catch((error) => console.error("Error fetching friend groups:", error));
     }, []);
-
+ // creates friend groups from the Flask API
     const createFriendGroup = () => {
         fetch("http://127.0.0.1:5000/friend_groups", {
             method: "POST",
