@@ -15,7 +15,7 @@ CREATE TABLE club_member (
 CREATE TABLE volunteers (
     v_roles VARCHAR(20) NOT NULL,
     p_email VARCHAR(40),
-    v_eventName VARCHAR(40) NOT NULL,
+    v_eventName VARCHAR(40) NOT NULL REFERENCES events(e_name),
     FOREIGN KEY (p_email) REFERENCES person(p_email)
 );
 
