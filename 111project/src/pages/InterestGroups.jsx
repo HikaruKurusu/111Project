@@ -97,7 +97,6 @@ function InterestGroups() {
                                 <td>{group.num_members}</td>
                                 <td>
                                     <button onClick={() => handleJoinInterestGroup(group.name)}>Join Interest Group</button>
-                                    <button className="details-button">Leave Interest Group</button>
                                 </td>
                             </tr>
                         ))}
