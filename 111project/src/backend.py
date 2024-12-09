@@ -311,7 +311,7 @@ def join_friend_group():
             return jsonify({"status": "failure", "message": "Friend group not found"}), 404
         
         # Add the member to the friend_group_member table
-        cursor.execute("INSERT INTO friend_group_member (fg_name, fg_member_name) VALUES (?, ?)", (group_name, member_name))
+        cursor.execute("INSERT INTO friend_group_member (fg_gcname, fg_member_name) VALUES (?, ?)", (group_name, member_name))
         
         # Increment the number of members in the friend group
         cursor.execute("UPDATE friend_groups SET fg_num_members = fg_num_members + 1 WHERE fg_gcname = ?", (group_name,))
@@ -342,7 +342,7 @@ def get_interest_groups():
         })
     return jsonify({"status": "failure", "message": "No interest groups found"}), 404
 
-@app.route('/interest_group/join', methods=['POST'])
+@app.route('/interest_groups/join', methods=['POST'])
 def join_interest_group():
     data = request.json
     group_name = data.get('group_name')
