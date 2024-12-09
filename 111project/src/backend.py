@@ -111,6 +111,7 @@ def unvolunteer_for_event():
 
 @app.route('/clubs', methods=['GET'])
 def get_clubs():
+    # Fetch all clubs from the club table
     """ Fetch all clubs from the club table """
     clubs = query_db("SELECT c_name, c_address, c_meeting_times, c_num_members FROM club")
     if clubs:
@@ -130,7 +131,7 @@ def get_clubs():
 
 @app.route('/events', methods=['GET'])
 def get_events():
-
+    # Fetch all events from the events table
     """ Fetch all events from the events table """
     events = query_db("SELECT e_name, e_type, e_numattending, e_address, e_numVolunteers FROM events")
     if events:
@@ -243,7 +244,7 @@ def join_club():
 @app.route('/clubs/members', methods=['GET'])
 def get_club_members():
     club_name = request.args.get('club_name')
-    
+    # Query that Fetch all club names and clubs/members
     if not club_name:
         return jsonify({"status": "failure", "message": "Club name is required"}), 400
     
@@ -271,6 +272,7 @@ def get_club_members():
 @app.route('/friend_groups', methods=['GET'])
 def get_friend_groups():
     """ Fetch all friend groups from the friend_groups table """
+    # Query that Fetch all friend groups from the friend_groups table 
     friend_groups = query_db("SELECT fg_gcname, fg_num_members FROM friend_groups")
     if friend_groups:
         return jsonify({
@@ -324,6 +326,7 @@ def join_friend_group():
 @app.route('/interest_groups', methods=['GET'])
 def get_interest_groups():
     """ Fetch all interest groups from the interest_group table """
+    # Query the that grabs all interest groups
     interest_groups = query_db("SELECT ig_name, ig_main_activity, ig_num_members FROM interest_group")
     if interest_groups:
         return jsonify({
@@ -376,7 +379,7 @@ def get_event_attendees():
     
     if not event_name:
         return jsonify({"status": "failure", "message": "Event name is required"}), 400
-
+    # is a query that retrives the event attendees
     attendees = query_db("""
         SELECT ea_person_email
         FROM event_attendees

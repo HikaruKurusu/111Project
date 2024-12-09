@@ -41,7 +41,7 @@ function FriendGroups() {
             })
             .catch((error) => console.error("Error creating friend group:", error));
     };
-
+    // uses the join friend group API
     const handleJoinFriendGroup = (groupName) => {
         fetch("http://127.0.0.1:5000/friend_groups/join", {
             method: "POST",
