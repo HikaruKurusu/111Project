@@ -299,7 +299,7 @@ def join_friend_group():
         cursor = conn.cursor()
         
         # Check if the member is already in any friend group
-        cursor.execute("SELECT 1 FROM friend_group_member WHERE fg_member_name = ?", (member_name,))
+        cursor.execute("SELECT 1 FROM friend_group_member WHERE fgm_member_name = ?", (member_name,))
         if cursor.fetchone():
             return jsonify({"status": "failure", "message": "Member is already in a friend group"}), 400
         
@@ -309,7 +309,7 @@ def join_friend_group():
             return jsonify({"status": "failure", "message": "Friend group not found"}), 404
         
         # Add the member to the friend_group_member table
-        cursor.execute("INSERT INTO friend_group_member (fg_gcname, fg_member_name) VALUES (?, ?)", (group_name, member_name))
+        cursor.execute("INSERT INTO friend_group_member (fgm_name, fgm_member_name) VALUES (?, ?)", (group_name, member_name))
         
         # Increment the number of members in the friend group
         cursor.execute("UPDATE friend_groups SET fg_num_members = fg_num_members + 1 WHERE fg_gcname = ?", (group_name,))
