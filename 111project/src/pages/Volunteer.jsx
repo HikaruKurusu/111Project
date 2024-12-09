@@ -21,6 +21,7 @@ function Volunteer() {
             .catch((error) => console.error("Error fetching events:", error));
     }, []);
 
+    // Adds a volenteer to the database given the API in the backend.py
     const handleVolunteer = (eventName) => {
         fetch("http://127.0.0.1:5000/events/volunteer", {
             method: "POST",
@@ -45,7 +46,7 @@ function Volunteer() {
             })
             .catch((error) => console.error("Error volunteering for event:", error));
     };
-
+    // Unenrolls voulenteers given te API in backend.py
     const handleUnvolunteer = (eventName) => {
         fetch("http://127.0.0.1:5000/events/unvolunteer", {
             method: "POST",
@@ -85,6 +86,7 @@ function Volunteer() {
                         </tr>
                     </thead>
                     <tbody>
+                        {/* displays Voulenteer */}
                         {events.map((event, index) => (
                             <tr key={index}>
                                 <td>{event.name}</td>

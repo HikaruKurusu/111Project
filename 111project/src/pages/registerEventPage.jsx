@@ -38,7 +38,7 @@ function RegisterEventPage() {
                 .catch(() => setMessage("Error fetching event attendees"));
         }
     }, [selectedEvent]);
-
+    // Registers for event given the API in backend.py
     const handleRegister = async () => {
         if (!email || !selectedEvent) {
             setMessage("Please provide both email and select an event");
@@ -111,6 +111,7 @@ function RegisterEventPage() {
                                     <th>Attendee Email</th>
                                 </tr>
                             </thead>
+                            {/* Displays them in table */}
                             <tbody>
                                 {attendees.map((attendee, index) => (
                                     <tr key={index}>

@@ -22,6 +22,7 @@ function Dashboard() {
                 </table>
             </div>
             <div className="taskbar">
+                {/* routes to a different page */}
                 <button onClick={() => navigate("/volunteer")}>Volunteer</button>
                 <button onClick={() => navigate("/clubs")}>Clubs</button>
                 <button onClick={() => navigate("/events")}>Events</button>

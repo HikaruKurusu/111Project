@@ -1,3 +1,4 @@
+/* Basic styling for Clubs */
 .clubs-table {
     width: 100%;
     border-collapse: collapse;
@@ -5,17 +6,17 @@
     font-size: 16px;
     text-align: left;
 }
-
+/* clubs table styles */
 .clubs-table th, .clubs-table td {
     padding: 10px 12px;
     border: 1px solid #ddd;
 }
-
+/* clubs table styles */
 .clubs-table th {
     background-color: #007bff;
     color: white;
 }
-
+/* changes row color */
 .clubs-table tr:nth-child(even) {
     background-color: #f9f9f9;
 }

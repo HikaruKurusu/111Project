@@ -1,3 +1,4 @@
+/* Basic styling for events */
 .events-table {
     width: 100%;
     border-collapse: collapse;
@@ -5,24 +6,25 @@
     font-size: 16px;
     text-align: left;
 }
-
+/* styling for the table */
 .events-table th, .events-table td {
     padding: 10px 12px;
     border: 1px solid #ddd;
 }
-
+/* styling for the table */
 .events-table th {
     background-color: #007bff;
     color: white;
 }
-
+/* changes color for rows */
 .events-table tr:nth-child(even) {
     background-color: #f9f9f9;
 }
+/* styling for form container */
 .form-container {
     margin: 20px 0;
 }
-
+/* styling for form  */
 form {
     display: flex;
     flex-direction: column;
@@ -36,7 +38,7 @@ form input {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
-
+/* form button format */
 form button {
     padding: 10px;
     font-size: 14px;
@@ -46,7 +48,7 @@ form button {
     border-radius: 4px;
     cursor: pointer;
 }
-
+/* button hover */
 form button:hover {
     background-color: #0056b3;
 }

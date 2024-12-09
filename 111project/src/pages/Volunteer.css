@@ -1,10 +1,11 @@
+/* Basict Styling for table container */
 .table-container {
     padding: 20px;
     margin: 20px auto;
     max-width: 1200px;
     width: 100%;
 }
-
+/* Basict Styling for eventsForVolunteers table */
 .eventsForVolunteers-table {
     width: 100%;
     border-collapse: collapse;
@@ -12,21 +13,21 @@
     font-size: 16px;
     text-align: left;
 }
-
+/* Basict Styling for eventsForVolunteers table */
 .eventsForVolunteers-table th, .eventsForVolunteers-table td {
     padding: 10px 12px;
     border: 1px solid #ddd;
 }
-
+/* Basict Styling for eventsForVolunteers table */
 .eventsForVolunteers-table th {
     background-color: #007bff;
     color: white;
 }
-
+/* Basict Styling for eventsForVolunteers table */
 .eventsForVolunteers-table tr:nth-child(even) {
     background-color: #f9f9f9;
 }
-
+/* Basict Styling for Buttons */
 button {
     background-color: #007bff;
     color: white;
@@ -37,7 +38,7 @@ button {
     cursor: pointer;
     font-size: 14px;
 }
-
+/* Basict Styling for Buttons hover*/
 button:hover {
     background-color: #0056b3;
 }
@@ -52,7 +53,7 @@ button:hover {
     cursor: pointer;
     font-size: 14px;
 }
-
+/* Styling for the Dashboard button hover */
 .dashboard-button:hover {
     background-color: #218838;
 }

@@ -29,7 +29,7 @@ function InterestGroups() {
         const { name, value } = e.target;
         setNewGroup((prev) => ({ ...prev, [name]: value }));
     };
-
+    // Creates interest groups using the API in backend.py file
     const handleAddGroup = () => {
         fetch("http://127.0.0.1:5000/interest_groups", {
             method: "POST",
@@ -50,7 +50,7 @@ function InterestGroups() {
             })
             .catch((error) => alert("Error creating interest group: " + error));
     };
-
+    // Able to join and interest Group based on API in backend.py file
     const handleJoinInterestGroup = (groupName) => {
         fetch("http://127.0.0.1:5000/interest_groups/join", {
             method: "POST",

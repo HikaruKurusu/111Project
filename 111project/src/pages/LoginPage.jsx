@@ -7,7 +7,7 @@ function LoginPage() {
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
     const navigate = useNavigate();
-
+    // Login using backend.py API for login
     const handleSubmit = async (event) => {
         event.preventDefault();
 
