@@ -97,101 +97,127 @@ VALUES
 INSERT OR IGNORE INTO volunteers (v_roles, p_email)
 VALUES ('Volunteer', 'user@example.com');
 
--- Join an event
--- This query updates the number of attendees for a specific event
-UPDATE events
-SET e_numattending = e_numattending + 1
-WHERE e_name = 'Hackathon';
 
--- Host an event
--- This query inserts a new event into the events table
-INSERT OR IGNORE INTO events (e_name, e_numattending, e_type, e_address)
-VALUES ('New Event', 0, 'Workshop', '123 New St');
+--DONE
+-- Login
+-- grabs from persons table
+SELECT p_email, p_name 
+FROM person 
+WHERE p_email = ? AND p_password = ?
 
--- Specify event location
--- This query inserts a new location for an event
-INSERT OR IGNORE INTO locations (l_address, l_name)
-VALUES ('123 New St', 'New Event Hall');
 
--- List all events with more than 50 attendees
-SELECT e_name, e_numattending, e_type, e_address
+--DONE
+-- adds Voulenteer to database
+SELECT 1 
+FROM events 
+WHERE e_name = ?
+SELECT 1 
+FROM volunteers 
+WHERE p_email = ? 
+AND v_eventName = ?
+UPDATE events SET e_numVolunteers = e_numVolunteers + 1 WHERE e_name = ?
+INSERT INTO volunteers (v_roles, p_email, v_eventName) VALUES (?, ?, ?)
+
+--DONE
+-- Unenrolls and removes Voulenteer to database
+SELECT 1 
+FROM events 
+WHERE e_name = ?
+UPDATE events SET e_numVolunteers = e_numVolunteers - 1 WHERE e_name = ?
+DELETE FROM volunteers WHERE p_email = ? AND v_eventName = ?
+
+--DONE
+-- Gets all tuples from club table
+SELECT c_name, c_address, c_meeting_times, c_num_members 
+FROM club
+
+--DONE
+-- inserts into events table
+INSERT INTO events (e_name, e_type, e_numattending, e_address, e_numVolunteers, e_creatorEmail) VALUES (?, ?, ?, ?, ?, ?)
+
+--DONE
+-- displays into the events table
+SELECT e_name, e_type, e_numattending, e_address, e_numVolunteers 
 FROM events
-WHERE e_numattending > 50;
 
--- Find all volunteers for a specific event
-SELECT v.p_email, v.v_roles
-FROM volunteers v
-JOIN events e ON v.p_email = e.e_name
-WHERE e.e_name = 'Hackathon';
+--DONE
+-- Puts things into Club table
+INSERT INTO club (c_name, c_address, c_meeting_times, c_num_members)
+VALUES (?, ?, ?, ?)
 
--- Update the type of an event
-UPDATE events
-SET e_type = 'Conference'
-WHERE e_name = 'Tech Meetup';
+--DONE
+-- Updates the Clubs table for people who decide to join the club
+SELECT 1 
+FROM club_member 
+WHERE cm_clubname = ? 
+AND cm_name = ?
+INSERT INTO club_member (cm_clubname, cm_name) VALUES (?, ?)
+UPDATE club SET c_num_members = c_num_members + 1 WHERE c_name = ?
 
--- Delete an event
-DELETE FROM events
-WHERE e_name = 'Art Exhibition';
+-- DONE
+-- Displays all club members
+SELECT cm_name 
+FROM club_member 
+WHERE cm_clubname = ?
 
--- Clubs Section
+-- DONE
+-- Displays all elements in friend group table
+SELECT fg_gcname, fg_num_members 
+FROM friend_groups
 
--- Explore clubs
--- This query selects all clubs from the club table
-SELECT * FROM club;
+-- DONE
+-- Updates the friendgroup database table when someone joins the friend groups
+SELECT 1 
+FROM friend_group_member 
+WHERE fg_member_name = ?
+SELECT 1 
+FROM friend_groups 
+WHERE fg_gcname = ?
+INSERT INTO friend_group_member (fg_name, fg_member_name) VALUES (?, ?)
+UPDATE friend_groups SET fg_num_members = fg_num_members + 1 WHERE fg_gcname = ?
 
--- Join a club
--- This query inserts a new member into a club
-INSERT OR IGNORE INTO club_member (cm_clubname, cm_name)
-VALUES ('Tech Club', 'user@example.com');
+--DONE
+-- Lists all interest Groups
+SELECT ig_name, ig_main_activity, ig_num_members 
+FROM interest_group
 
--- Host a club
--- This query inserts a new club into the club table
-INSERT OR IGNORE INTO club (c_name, c_address, c_meeting_times, c_num_members)
-VALUES ('New Club', '456 New Ave', 'Wed 6:00 PM', 1);
+-- DONE
+-- Updates data in interest group when a person joins
+SELECT 1 
+FROM interest_group 
+WHERE ig_name = ?
+INSERT INTO interest_group_member (igm_interest_group_name, igm_name) VALUES (?, ?)
+UPDATE interest_group SET ig_num_members = ig_num_members + 1 WHERE ig_name = ?
 
--- List all clubs with their meeting times
-SELECT c_name, c_meeting_times
-FROM club;
+-- DONE
+-- Lists even attendees
+SELECT ea_person_email
+FROM event_attendees
+WHERE ea_event_name = ?
 
--- Find all members of a specific club
-SELECT cm_name
-FROM club_member
-WHERE cm_clubname = 'Tech Club';
+-- DONE
+-- Updates events when a person registers
+SELECT 1 
+FROM events 
+WHERE e_name = ?
+SELECT 1 
+FROM person 
+WHERE p_email = ?
+SELECT 1 
+FROM event_attendees 
+WHERE ea_event_name = ? 
+AND ea_person_email = ?
+INSERT INTO event_attendees (ea_event_name, ea_person_email) VALUES (?, ?)
+UPDATE events SET e_numattending = e_numattending + 1 WHERE e_name = ?
 
--- Update the number of members in a club
-UPDATE club
-SET c_num_members = c_num_members + 1
-WHERE c_name = 'Gaming Club';
+-- DONE 
+-- Create a interest group
+INSERT INTO interest_group (ig_name, ig_main_activity, ig_num_members)
+VALUES (?, ?, ?)
 
--- Interest Groups Section
-
--- Connect with like-minded individuals
--- This query selects all members of a specific interest group
-SELECT p.p_name, p.p_email
-FROM person p
-JOIN interest_group_member igm ON p.p_name = igm.igm_name
-WHERE igm.igm_interest_group_name = 'Coding Club';
-
--- Create a friend group
--- This query inserts a new friend group into the friend_group table
-INSERT OR IGNORE INTO friend_group (fg_groupchatname, fg_nummembers)
-VALUES ('New Friends', 0);
-
--- Plan meetups at various locations
--- This query selects all locations and the events happening at each location
-SELECT l.l_name, l.l_address, e.e_name, e.e_type
-FROM locations l
-LEFT JOIN events e ON l.l_address = e.e_address;
-
--- List all interest groups and their main activities
-SELECT ig_name, ig_main_activity
-FROM interest_group;
-
--- Find all members of a specific interest group
-SELECT igm_name
-FROM interest_group_member
-WHERE igm_interest_group_name = 'Painting Club';
-
--- Plan meetups at various locations
--- This query selects all locations
-SELECT * FROM locations;
+-- DONE
+-- Creates Friend Group
+SELECT 1 
+FROM friend_groups 
+WHERE fg_gcname = ?
+INSERT INTO friend_groups (fg_gcname, fg_num_members) VALUES (?, ?)
