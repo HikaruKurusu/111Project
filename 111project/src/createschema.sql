@@ -53,6 +53,11 @@ CREATE TABLE friend_groups (
     fg_num_members UNSIGNED INT
 );
 
+CREATE TABLE friend_group_member (
+    fg_name VARCHAR(20) NOT NULL,
+    fg_member_name VARCHAR(30) NOT NULL
+);
+
 CREATE TABLE interest_group (
     ig_name VARCHAR(30) PRIMARY KEY NOT NULL,
     ig_main_activity VARCHAR(40) NOT NULL,

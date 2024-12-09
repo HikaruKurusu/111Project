@@ -81,8 +81,13 @@ VALUES
     ('John Doe', 'Coding Club'),
     ('Jane Smith', 'Painting Club');
 
-    
---------------------------------------------------------------------------------
+-- Insert into friend_group_member table (Ensure fg_name exists in friend_groups and fg_member_name exists in person)
+INSERT INTO friend_group_member (fg_name, fg_member_name)
+VALUES 
+    ('Tech Talk', 'John Doe'),
+    ('ChessEntusiasts', 'Jane Smith'),
+    ('Sports Fans', 'Alice Jones'),
+    ('Artists United', 'Mike Jordan');
 
 
 -- Events Section

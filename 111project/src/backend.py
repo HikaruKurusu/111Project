@@ -285,6 +285,42 @@ def get_friend_groups():
         })
     return jsonify({"status": "failure", "message": "No friend groups found"}), 404
 
+@app.route('/friend_groups/join', methods=['POST'])
+def join_friend_group():
+    data = request.json
+    group_name = data.get('group_name')
+    member_name = data.get('member_name')
+    
+    if not group_name or not member_name:
+        return jsonify({"status": "failure", "message": "Group name and member name are required"}), 400
+    
+    try:
+        conn = sqlite3.connect(DATABASE)
+        cursor = conn.cursor()
+        
+        # Check if the member is already in any friend group
+        cursor.execute("SELECT 1 FROM friend_group_member WHERE fg_member_name = ?", (member_name,))
+        if cursor.fetchone():
+            return jsonify({"status": "failure", "message": "Member is already in a friend group"}), 400
+        
+        # Check if the friend group exists
+        cursor.execute("SELECT 1 FROM friend_groups WHERE fg_gcname = ?", (group_name,))
+        if not cursor.fetchone():
+            return jsonify({"status": "failure", "message": "Friend group not found"}), 404
+        
+        # Add the member to the friend_group_member table
+        cursor.execute("INSERT INTO friend_group_member (fg_name, fg_member_name) VALUES (?, ?)", (group_name, member_name))
+        
+        # Increment the number of members in the friend group
+        cursor.execute("UPDATE friend_groups SET fg_num_members = fg_num_members + 1 WHERE fg_gcname = ?", (group_name,))
+        
+        conn.commit()
+        conn.close()
+        
+        return jsonify({"status": "success", "message": "Successfully joined the friend group!"}), 200
+    except Exception as e:
+        return jsonify({"status": "failure", "message": str(e)}), 500
+
 @app.route('/interest_groups', methods=['GET'])
 def get_interest_groups():
     """ Fetch all interest groups from the interest_group table """

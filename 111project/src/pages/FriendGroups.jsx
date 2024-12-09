@@ -6,6 +6,7 @@ function FriendGroups() {
     const navigate = useNavigate();
     const [friendGroups, setFriendGroups] = useState([]);
     const [newGroupName, setNewGroupName] = useState("");
+    const [userName, setUserName] = useState("John Doe"); // Assuming user name is tracked
 
     useEffect(() => {
         // Fetch friend groups from the Flask API
@@ -41,6 +42,31 @@ function FriendGroups() {
             .catch((error) => console.error("Error creating friend group:", error));
     };
 
+    const handleJoinFriendGroup = (groupName) => {
+        fetch("http://127.0.0.1:5000/friend_groups/join", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ group_name: groupName, member_name: "TESTUSER" }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.status === "success") {
+                    alert(data.message);
+                    // Update the friend group list to reflect the new member count
+                    setFriendGroups((prevGroups) =>
+                        prevGroups.map((group) =>
+                            group.name === groupName
+                                ? { ...group, num_members: group.num_members + 1 }
+                                : group
+                        )
+                    );
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch((error) => console.error("Error joining friend group:", error));
+    };
+
     return (
         <div>
             <div className="table-container">
@@ -59,9 +85,7 @@ function FriendGroups() {
                                 <td>{group.name}</td>
                                 <td>{group.num_members}</td>
                                 <td>
-                                    <button onClick={() => alert(`Viewing details for ${group.name}`)}>
-                                        Join Group
-                                    </button>
+                                    <button onClick={() => handleJoinFriendGroup(group.name)}>Join Group</button>
                                 </td>
                             </tr>
                         ))}
