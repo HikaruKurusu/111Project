@@ -54,8 +54,8 @@ CREATE TABLE friend_groups (
 );
 
 CREATE TABLE friend_group_member (
-    fg_name VARCHAR(20) NOT NULL,
-    fg_member_name VARCHAR(30) NOT NULL
+    fgm_name VARCHAR(20) NOT NULL,
+    fgm_member_name VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE interest_group (

@@ -51,6 +51,31 @@ function InterestGroups() {
             .catch((error) => alert("Error creating interest group: " + error));
     };
 
+    const handleJoinInterestGroup = (groupName) => {
+        fetch("http://127.0.0.1:5000/interest_group/join", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ group_name: groupName, member_name: "Alice Jones" }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.status === "success") {
+                    alert(data.message);
+                    // Update the interest group list to reflect the new member count
+                    setInterestGroups((prevGroups) =>
+                        prevGroups.map((group) =>
+                            group.name === groupName
+                                ? { ...group, num_members: group.num_members + 1 }
+                                : group
+                        )
+                    );
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch((error) => console.error("Error joining interest group:", error));
+    };
+
     return (
         <div className="interest-groups-container">
             <h1>Interest Groups</h1>
@@ -71,7 +96,7 @@ function InterestGroups() {
                                 <td>{group.main_activity}</td>
                                 <td>{group.num_members}</td>
                                 <td>
-                                    <button className="details-button">Join Interest Group</button>
+                                    <button onClick={() => handleJoinInterestGroup(group.name)}>Join Interest Group</button>
                                     <button className="details-button">Leave Interest Group</button>
                                 </td>
                             </tr>

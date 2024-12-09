@@ -339,6 +339,37 @@ def get_interest_groups():
         })
     return jsonify({"status": "failure", "message": "No interest groups found"}), 404
 
+@app.route('/interest_group/join', methods=['POST'])
+def join_interest_group():
+    data = request.json
+    group_name = data.get('group_name')
+    member_name = data.get('member_name')
+    
+    if not group_name or not member_name:
+        return jsonify({"status": "failure", "message": "Group name and member name are required"}), 400
+    
+    try:
+        conn = sqlite3.connect(DATABASE)
+        cursor = conn.cursor()
+        
+        # Check if the interest group exists
+        cursor.execute("SELECT 1 FROM interest_group WHERE ig_name = ?", (group_name,))
+        if not cursor.fetchone():
+            return jsonify({"status": "failure", "message": "Interest group not found"}), 404
+        
+        # Add the member to the interest_group_member table
+        cursor.execute("INSERT INTO interest_group_member (igm_interest_group_name, igm_name) VALUES (?, ?)", (group_name, member_name))
+        
+        # Increment the number of members in the interest group
+        cursor.execute("UPDATE interest_group SET ig_num_members = ig_num_members + 1 WHERE ig_name = ?", (group_name,))
+        
+        conn.commit()
+        conn.close()
+        
+        return jsonify({"status": "success", "message": "Successfully joined the interest group!"}), 200
+    except Exception as e:
+        return jsonify({"status": "failure", "message": str(e)}), 500
+
 @app.route('/events/attendees', methods=['GET'])
 def get_event_attendees():
     event_name = request.args.get('event_name')  # Get the event name from the query parameter
