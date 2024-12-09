@@ -32,6 +32,14 @@ VALUES
     ('Artists United', 8),
     ('Chess Enthusiasts', 12);
 
+-- Insert into friend_group_member table (Ensure fg_name exists in friend_groups and fg_member_name exists in person)
+INSERT INTO friend_group_member (fgm_name, fgm_member_name)
+VALUES 
+    ('Tech Talk', 'John Doe'),
+    ('ChessEntusiasts', 'Jane Smith'),
+    ('Sports Fans', 'Alice Jones'),
+    ('Artists United', 'Mike Jordan');
+
 -- Insert into locations table
 INSERT INTO locations (l_address, l_name)
 VALUES 
@@ -81,13 +89,6 @@ VALUES
     ('John Doe', 'Coding Club'),
     ('Jane Smith', 'Painting Club');
 
--- Insert into friend_group_member table (Ensure fg_name exists in friend_groups and fg_member_name exists in person)
-INSERT INTO friend_group_member (fgm_name, fg,_member_name)
-VALUES 
-    ('Tech Talk', 'John Doe'),
-    ('ChessEntusiasts', 'Jane Smith'),
-    ('Sports Fans', 'Alice Jones'),
-    ('Artists United', 'Mike Jordan');
 
 
 -- Events Section
