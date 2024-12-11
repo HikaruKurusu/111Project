@@ -57,7 +57,6 @@ function LoginPage() {
                     />
                 </div>
                 <button type="submit">Login</button>
-                <button onClick={() => navigate('/dashboard')}>temp dashboard button</button>
 {message && <p>{message}</p>}
             </form>
             {message && <p>{message}</p>}
