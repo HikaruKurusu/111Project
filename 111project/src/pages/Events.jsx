@@ -14,6 +14,15 @@ function Events() {
     });
 
     useEffect(() => {
+        const storedUserEmail = localStorage.getItem("userEmail");
+        if (storedUserEmail) {
+            setUserEmail(storedUserEmail);
+        } else {
+            console.error("User email not found in localStorage");
+        }
+    }, []);
+
+    useEffect(() => {
         // Fetch events from the Flask API
         fetch("http://127.0.0.1:5000/events")
             .then((response) => response.json())
@@ -38,7 +47,7 @@ function Events() {
         fetch("http://127.0.0.1:5000/events", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ ...form, creator_email: 'test@example.com' }),  // Include creator_email; change tov variable later
+            body: JSON.stringify({ ...form, creator_email: userEmail }),  // Include creator_email; change tov variable later
         })
             .then((response) => response.json())
             .then((data) => {

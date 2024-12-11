@@ -6,7 +6,17 @@ function FriendGroups() {
     const navigate = useNavigate();
     const [friendGroups, setFriendGroups] = useState([]);
     const [newGroupName, setNewGroupName] = useState("");
-    const [userName, setUserName] = useState("John Doe"); // Assuming user name is tracked
+    const [userName, setUserName] = useState(""); // Assuming user name is tracked
+
+    useEffect(() => {
+        // Retrieve the user's name from localStorage
+        const storedUserName = localStorage.getItem("userName");
+        if (storedUserName) {
+            setUserName(storedUserName);
+        } else {
+            console.error("User name not found in localStorage");
+        }
+    }, []);
 
     useEffect(() => {
         // Fetch friend groups from the Flask API
@@ -46,7 +56,7 @@ function FriendGroups() {
         fetch("http://127.0.0.1:5000/friend_groups/join", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ group_name: groupName, member_name: "TESTUSER" }),
+            body: JSON.stringify({ group_name: groupName, member_name: userName }),
         })
             .then((response) => response.json())
             .then((data) => {

@@ -21,6 +21,8 @@ function LoginPage() {
             const data = await response.json();
             if (data.status === "success") {
                 setMessage("Login successful!");
+                localStorage.setItem("userEmail", data.user.email);
+                localStorage.setItem("userName", data.user.name);
                 // Redirect to the Dashboard page
                 navigate("/dashboard", { state: { user: data.user } });
             } else {

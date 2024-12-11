@@ -8,6 +8,15 @@ function Volunteer() {
     const [userEmail, setUserEmail] = useState(""); // Assuming user email is tracked
 
     useEffect(() => {
+        const storedUserEmail = localStorage.getItem("userEmail");
+        if (storedUserEmail) {
+            setUserEmail(storedUserEmail);
+        } else {
+            console.error("User email not found in localStorage");
+        }
+    }, []);
+
+    useEffect(() => {
         // Fetch events from the Flask API
         fetch("http://127.0.0.1:5000/events")
             .then((response) => response.json())
@@ -21,12 +30,16 @@ function Volunteer() {
             .catch((error) => console.error("Error fetching events:", error));
     }, []);
 
-    // Adds a volenteer to the database given the API in the backend.py
     const handleVolunteer = (eventName) => {
+        if (!userEmail) {
+            alert("User email not available. Please log in.");
+            return;
+        }
         fetch("http://127.0.0.1:5000/events/volunteer", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: "user@example.com", event_name: eventName }),
+            body: JSON.stringify({ email: userEmail, event_name: eventName }),
+            credentials: 'include',
         })
             .then((response) => response.json())
             .then((data) => {
@@ -46,12 +59,17 @@ function Volunteer() {
             })
             .catch((error) => console.error("Error volunteering for event:", error));
     };
-    // Unenrolls voulenteers given te API in backend.py
+
     const handleUnvolunteer = (eventName) => {
+        if (!userEmail) {
+            alert("User email not available. Please log in.");
+            return;
+        }
         fetch("http://127.0.0.1:5000/events/unvolunteer", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: "user@example.com", event_name: eventName }),
+            body: JSON.stringify({ email: userEmail, event_name: eventName }),
+            credentials: 'include',
         })
             .then((response) => response.json())
             .then((data) => {
@@ -86,7 +104,6 @@ function Volunteer() {
                         </tr>
                     </thead>
                     <tbody>
-                        {/* displays Voulenteer */}
                         {events.map((event, index) => (
                             <tr key={index}>
                                 <td>{event.name}</td>

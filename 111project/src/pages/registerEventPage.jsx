@@ -6,12 +6,12 @@ function RegisterEventPage() {
     const [selectedEvent, setSelectedEvent] = useState("");
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState("");
-    const [attendees, setAttendees] = useState([]);  // New state for attendees
+    const [attendees, setAttendees] = useState([]); 
     const navigate = useNavigate();
 
     // Fetch events on mount
     useEffect(() => {
-        fetch("http://127.0.0.1:5000/events")  // Adjust URL if needed
+        fetch("http://127.0.0.1:5000/events")
             .then(response => response.json())
             .then(data => {
                 if (data.status === "success") {
@@ -111,7 +111,7 @@ function RegisterEventPage() {
                                     <th>Attendee Email</th>
                                 </tr>
                             </thead>
-                            {/* Displays them in table */}
+                            {}
                             <tbody>
                                 {attendees.map((attendee, index) => (
                                     <tr key={index}>

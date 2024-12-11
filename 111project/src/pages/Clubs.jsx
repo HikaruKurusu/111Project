@@ -14,7 +14,7 @@ function Clubs() {
     const [selectedClub, setSelectedClub] = useState(null);
     const [members, setMembers] = useState([]);
     const [noMembersFound, setNoMembersFound] = useState(false);
-    const [userName, setUserName] = useState("John Doe"); // Assuming user name is tracked
+    const [userName, setUserName] = useState(""); // Assuming user name is tracked
 
     useEffect(() => {
         // Fetch clubs from the Flask API
@@ -30,11 +30,21 @@ function Clubs() {
             .catch((error) => console.error("Error fetching clubs:", error));
     }, []);
 
+    useEffect(() => {
+        // Retrieve the user's name from localStorage
+        const storedUserName = localStorage.getItem("userName");
+        if (storedUserName) {
+            setUserName(storedUserName);
+        } else {
+            console.error("User name not found in localStorage");
+        }
+    }, []);
+    
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setNewClub((prev) => ({ ...prev, [name]: value }));
     };
-    // adds club based on backend.py API
+
     const handleAddClub = (e) => {
         e.preventDefault();
         fetch("http://127.0.0.1:5000/clubs", {
@@ -55,7 +65,7 @@ function Clubs() {
             })
             .catch((error) => console.error("Error adding club:", error));
     };
-    // View club table based on backend.py API
+
     const handleViewDetails = (clubName) => {
         fetch(`http://127.0.0.1:5000/clubs/members?club_name=${clubName}`)
             .then((response) => response.json())
@@ -74,12 +84,12 @@ function Clubs() {
                 setNoMembersFound(true);
             });
     };
-// Handles joining club based on backend.py API
+
     const handleJoinClub = (clubName) => {
         fetch("http://127.0.0.1:5000/clubs/join", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ club_name: clubName, member_name: 'TESTUSER' }),
+            body: JSON.stringify({ club_name: clubName, member_name: userName }),
         })
             .then((response) => response.json())
             .then((data) => {
@@ -116,7 +126,6 @@ function Clubs() {
                     <tbody>
                         {clubs.map((club, index) => (
                             <tr key={index}>
-                                {/* Displays in a table */}
                                 <td>{club.name}</td>
                                 <td>{club.address}</td>
                                 <td>{club.meeting_times}</td>
@@ -154,7 +163,7 @@ function Clubs() {
                     )}
                 </div>
             )}
-            {/* inputs */}
+
             <form onSubmit={handleAddClub} className="add-club-form">
                 <h2>Add a New Club</h2>
                 <input

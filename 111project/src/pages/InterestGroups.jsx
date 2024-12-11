@@ -5,11 +5,22 @@ import "./InterestGroups.css";
 function InterestGroups() {
     const navigate = useNavigate();
     const [interestGroups, setInterestGroups] = useState([]);
+    const [userName, setUserName] = useState("");
     const [newGroup, setNewGroup] = useState({
         name: "",
         main_activity: "",
         num_members: 0,
     });
+
+    useEffect(() => {
+        // Retrieve the user's name from localStorage
+        const storedUserName = localStorage.getItem("userName");
+        if (storedUserName) {
+            setUserName(storedUserName);
+        } else {
+            console.error("User name not found in localStorage");
+        }
+    }, []);
 
     useEffect(() => {
         // Fetch interest groups from the Flask API
@@ -55,7 +66,7 @@ function InterestGroups() {
         fetch("http://127.0.0.1:5000/interest_groups/join", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ group_name: groupName, member_name: "Alice Jones" }),
+            body: JSON.stringify({ group_name: groupName, member_name: userName }),
         })
             .then((response) => response.json())
             .then((data) => {

@@ -4,7 +4,7 @@ import sqlite3
 import os  # Make sure this is imported
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for cross-origin requests
+CORS(app, supports_credentials=True)  # Enable CORS for cross-origin requests
 
 DATABASE = os.path.join(os.path.dirname(__file__), 'Checkpoint3-dbase.sqlite3')
 
