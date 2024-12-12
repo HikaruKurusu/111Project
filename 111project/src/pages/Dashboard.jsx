@@ -8,7 +8,7 @@ function Dashboard() {
 
     return (
         <div>
-            <h2>Welcome to the Dashboard</h2>
+            <h2>Welcome to Friend Finder</h2>
             <div className="table-container">
                 <table className="friends-table">
                     <thead>
